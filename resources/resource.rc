@@ -1,0 +1,27 @@
+1 ICON "icon.ico"
+
+1 VERSIONINFO
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      "zvqle"
+            VALUE "FileDescription",  "Layl Shell"
+            VALUE "FileVersion",      "0, 0, 0, 0"
+            VALUE "InternalName",     "LaylSh"
+            VALUE "LegalCopyright",   "Copyright 2024 zvqle. All rights reserved."
+            VALUE "OriginalFilename", "layl.exe"
+            VALUE "ProductName",      "Layl-Shell"
+            VALUE "ProductVersion",   "0, 0, 0, 0"
+            VALUE "LegalTrademarks",  "zvqle"
+            VALUE "Comments",         "Shell"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

@@ -2,13 +2,11 @@ use std::process;
 
 pub fn cmd_checker(data: Vec<&str>){
     if data.is_empty() {
-        println!();
         return;
     }
     match data[0].to_lowercase().as_str() {
         "echo" => {
             if data.len() <= 1 {
-                println!();
                 return;
             }
             for arg in &data[1..] {

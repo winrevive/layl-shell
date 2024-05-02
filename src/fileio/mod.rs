@@ -3,6 +3,8 @@ use std::io::{self, BufRead, Write};
 
 
 
+
+
 pub fn fcreate(data: Vec<&str>) {
     if data.len() <= 1 {
         println!("usage: fcreate [filename]");
@@ -17,7 +19,6 @@ pub fn fcreate(data: Vec<&str>) {
         }
     }
 }
-
 
 pub fn fwrite(data: Vec<&str>){
     if data.len() <= 2 {

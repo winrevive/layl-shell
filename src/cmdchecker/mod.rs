@@ -1,6 +1,6 @@
 use std::process;
 use crate::fileio;
-
+use crate::dirio;
 
 pub fn cmd_checker(data: Vec<&str>){
     if data.is_empty() {
@@ -36,6 +36,24 @@ pub fn cmd_checker(data: Vec<&str>){
         }
         "fprint" => {
             fileio::fprint(data)
+        }
+        "dcreate" => {
+            dirio::dcreate(data);
+        }
+        "ddelete" => {
+            dirio::ddelete(data);
+        }
+        "rddelete" => {
+            dirio::rddelete(data);
+        }
+        "moveto" => {
+            dirio::change_directory(data);
+        }
+        "cd" => {
+            dirio::current_directory();
+        }
+        "pd" => {
+            dirio::print_directory(data);
         }
         _ => 
             println!("{} wasn't found", data[0])

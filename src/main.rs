@@ -2,6 +2,7 @@ mod cli;
 mod freader;
 mod cmdchecker;
 mod fileio;
+mod dirio;
 use std::env;
 
 

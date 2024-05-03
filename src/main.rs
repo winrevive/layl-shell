@@ -1,6 +1,10 @@
 mod cli;
 mod freader;
 mod cmdchecker;
+mod fileio;
+mod dirio;
+mod processmgmt;
+mod lyltools;
 use std::env;
 
 

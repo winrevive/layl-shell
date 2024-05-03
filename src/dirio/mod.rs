@@ -47,6 +47,10 @@ pub fn ddelete(data: Vec<&str>){
     }
 }
 
+// pub fn dcopy(data: Vec<&str>){
+//     // TODO: Add Recursive Directory Copying
+// }
+
 pub fn rddelete(data: Vec<&str>){
     if data.len() <= 1 {
         println!("usage: rddelete [dirname]");

@@ -1,6 +1,11 @@
 use std::process;
+
+
 use crate::fileio;
 use crate::dirio;
+use crate::processmgmt;
+use crate::lyltools;
+
 
 pub fn cmd_checker(data: Vec<&str>){
     if data.is_empty() {
@@ -55,7 +60,19 @@ pub fn cmd_checker(data: Vec<&str>){
         "pd" => {
             dirio::print_directory(data);
         }
-        _ => 
-            println!("{} wasn't found", data[0])
+        "kill" => {
+            processmgmt::kill_process(data);
+        }
+        "getpid" => {
+            processmgmt::get_pid(data)
+        }
+        "sudo" => {
+            processmgmt::sudo(data);
+        }
+        _ => {
+            if lyltools::start_process(data[0..].join(" ").as_str()) == false {
+                println!("{} wasn't found", data[0])
+            }
+        }
     }
 }

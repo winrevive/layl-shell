@@ -6,8 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-winapi = { version = "0.3", features = ["winuser", "winbase", "handleapi", "processthreadsapi", "synchapi", "shellapi"] }
+winapi = { version = "0.3", features = ["winuser", "winbase", "handleapi", "processthreadsapi", "synchapi", "shellapi", "winreg", "ntsecapi", "securitybaseapi", "powrprof"] }
 create_process_w = { version = "0.1.0", package = "CreateProcessW" }
+phnt = "0.0.26"
 
 [build-dependencies]
 winres = "0.1.12"
+

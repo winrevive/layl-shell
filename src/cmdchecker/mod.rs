@@ -89,6 +89,12 @@ pub fn cmd_checker(data: Vec<&str>){
         "power" => {
             power::power_management(data);
         }
+        "about" => {
+            println!("Layl-Shell\nCompiled On {}",lyltools::whats_the_version());
+        }
+        "wait" => {
+            lyltools::wait(data);
+        }
         _ => {
             if lyltools::start_process(data[0..].join(" ").as_str()) == false {
                 println!("{} wasn't found", data[0])

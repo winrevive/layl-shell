@@ -2,6 +2,7 @@
 use std::{fs::{self, File}, io::{self, Read, Write}};
 
 use create_process_w::Command;
+use winapi::um::synchapi::Sleep;
 
 
 pub fn start_process(process_string: &str) -> bool {
@@ -44,4 +45,25 @@ pub fn pause_terminal() {
     let _ = io::stdin().read_exact(&mut buffer);
     let _ = io::stdin().read(&mut buffer);
     io::stdout().flush().expect("Error Flushing Standard Output");
+}
+
+pub fn whats_the_version() -> &'static str {
+    let ver = "May 5th 2024";
+    ver
+}
+
+pub fn wait(data: Vec<&str>) {
+    if data.len() <= 1 {
+        println!("usage: wait [ms]");
+        return;
+    }
+    let time: Result<u32, _> = data[1].parse();
+    match time {
+        Ok(n) => {
+            unsafe{Sleep(n);}
+        }
+        Err(e) => {
+            eprintln!("{}", e);
+        }
+    }
 }

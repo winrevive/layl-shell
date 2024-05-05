@@ -1,7 +1,7 @@
 use std::io;
 use std::io::Write;
 use crate::cmdchecker;
-
+use crate::lyltools;
 
 
 fn split_str(buffer: &str) -> Vec<&str>{
@@ -9,7 +9,7 @@ fn split_str(buffer: &str) -> Vec<&str>{
 }
 
 pub fn start_cli(){
-    println!("Layl Shell\nCopyright zvqle, All Rights Resered\n");
+    println!("Layl Shell\nCompiled On {}\nThis program comes with absolutely NO warranty, Use at your own risk.\n\nCreated By zvqle\n", lyltools::whats_the_version());
     let mut buffer = String::new();
     loop {
         print!("-> ");
@@ -22,3 +22,4 @@ pub fn start_cli(){
         cmdchecker::cmd_checker(str_data);
     }
 }
+

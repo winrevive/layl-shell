@@ -33,7 +33,7 @@ pub fn fwrite(data: Vec<&str>){
         }
     };
     file.write_all(data[2..].join(" ").as_bytes()).expect("write failed");
-    println!("Created a file data.txt");
+    println!("Wrote File");
 }
 
 pub fn fdelete(data: Vec<&str>){
@@ -110,7 +110,7 @@ pub fn fread(data: Vec<&str>){
             }
         }
         Err(e) => {
-            eprintln!("Error, {}", e);
+            eprintln!("{}", e);
         }
     }
 }

@@ -8,6 +8,7 @@ To start a process, just type the name of the process in the shells. Yep, thats 
     - starts a process as administrator
 
 # Manipulationg Processes
+
 - kill [pid]
     - kills the process with that PID
 - getpid [pid]

@@ -3,8 +3,10 @@ use std::process;
 
 use crate::fileio;
 use crate::dirio;
+use crate::power;
 use crate::processmgmt;
 use crate::lyltools;
+use crate::reg;
 
 
 pub fn cmd_checker(data: Vec<&str>){
@@ -68,6 +70,30 @@ pub fn cmd_checker(data: Vec<&str>){
         }
         "sudo" => {
             processmgmt::sudo(data);
+        }
+        "mreg" => {
+            if lyltools::check_if_perms() == true {
+                reg::start_mreg(data);
+            }
+            else {
+                println!("This Command Requires Administrative Privliages, Please Run Layl As Administrator.")
+            }
+            
+        }
+        "cls" => {
+            print!("\x1B[2J\x1B[1;1H");
+        }
+        "pause" => {
+            lyltools::pause_terminal()
+        }
+        "power" => {
+            power::power_management(data);
+        }
+        "about" => {
+            println!("Layl-Shell\nCompiled On {}",lyltools::whats_the_version());
+        }
+        "wait" => {
+            lyltools::wait(data);
         }
         _ => {
             if lyltools::start_process(data[0..].join(" ").as_str()) == false {

@@ -3,12 +3,12 @@
 - echo [a]
     - prints a into the console
 - wait [ms]
-    COMING SOON
+    makes the shell pause for a specifc amount of time
 - pause
-    COMING SOON
-- ver and about
-    COMING SOON
+    pauses the shell
+- about
+    shows the build of the shell
 - cls
-    COMING SOON
+    clears the screen
 - changetitlebar [name]
     COMING SOON

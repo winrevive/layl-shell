@@ -5,6 +5,8 @@ mod fileio;
 mod dirio;
 mod processmgmt;
 mod lyltools;
+mod reg;
+mod power;
 use std::env;
 
 

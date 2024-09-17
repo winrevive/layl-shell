@@ -48,7 +48,7 @@ pub fn pause_terminal() {
 }
 
 pub fn whats_the_version() -> &'static str {
-    let ver = "May 5th 2024";
+    let ver = "September 17th 2024";
     ver
 }
 

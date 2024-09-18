@@ -7,7 +7,8 @@ Welcome to the Layl Shell, a shell and script interperter for Microsoft Windows
 ## How To Get The Executable
 
 To get the beta version, compile the source in the dev branch of the repository
-to get the stable version, check [releases](https://github.com/winrevive/layl-shell/releases)
+
+To get the stable version, check [releases](https://github.com/winrevive/layl-shell/releases)
 
 ## How To Use
 

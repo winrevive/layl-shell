@@ -1,26 +1,15 @@
 use std::fs::{self, File, OpenOptions};
 use std::io::{self, BufRead, Write};
 
-
-
-
-
-pub fn fcreate(data: Vec<&str>) {
+pub fn touch(data: Vec<&str>) -> Result<(), Box<dyn std::error::Error>> {
     if data.len() <= 1 {
-        println!("usage: fcreate [filename]");
+        println!("usage: touch [filename]");
     }
-    let file = File::create(data[1]);
-    match file {
-        Ok(_) => {
-            println!("Created File");
-        }
-        Err(e) => {
-            eprintln!("{}", e);     
-        }
-    }
+    let file = File::create(data[1])?;
+    Ok(())
 }
 
-pub fn fwrite(data: Vec<&str>){
+pub fn fwrite(data: Vec<&str>) {
     if data.len() <= 2 {
         println!("usage: fwrite [filename] [content]");
         return;
@@ -28,15 +17,16 @@ pub fn fwrite(data: Vec<&str>){
     let mut file = match File::create(data[1]) {
         Ok(file) => file,
         Err(e) => {
-            eprintln!("{}", e);     
+            eprintln!("{}", e);
             return;
         }
     };
-    file.write_all(data[2..].join(" ").as_bytes()).expect("write failed");
+    file.write_all(data[2..].join(" ").as_bytes())
+        .expect("write failed");
     println!("Wrote File");
 }
 
-pub fn fdelete(data: Vec<&str>){
+pub fn fdelete(data: Vec<&str>) {
     if data.len() <= 1 {
         println!("usage: fdelete [filename]");
         return;
@@ -51,7 +41,7 @@ pub fn fdelete(data: Vec<&str>){
     }
 }
 
-pub fn fcopy(data: Vec<&str>){
+pub fn fcopy(data: Vec<&str>) {
     if data.len() <= 2 {
         println!("usage: fcopy [originalfile] [newfile]");
         return;
@@ -66,16 +56,16 @@ pub fn fcopy(data: Vec<&str>){
     }
 }
 
-pub fn fprint(data: Vec<&str>){
+pub fn fprint(data: Vec<&str>) {
     if data.len() <= 2 {
         println!("usage: fprint [filename] [content]");
         return;
     }
-    let mut file= match OpenOptions::new().append(true).write(true).open(data[1]) {
+    let mut file = match OpenOptions::new().append(true).write(true).open(data[1]) {
         Ok(file) => file,
         Err(e) => {
             eprintln!("{}", e);
-            return
+            return;
         }
     };
     let status = writeln!(file, "{}\n", data[2..].join(" "));
@@ -89,16 +79,16 @@ pub fn fprint(data: Vec<&str>){
     }
 }
 
-pub fn fread(data: Vec<&str>){
+pub fn fread(data: Vec<&str>) {
     if data.len() <= 1 {
         println!("usage: fread [filename]");
         return;
     }
     let file = File::open(data[1]);
     match file {
-        Ok(file) =>{
+        Ok(file) => {
             let reader = io::BufReader::new(file);
-            for line in reader.lines(){
+            for line in reader.lines() {
                 match line {
                     Ok(line) => {
                         println!("{}", line);
@@ -114,3 +104,4 @@ pub fn fread(data: Vec<&str>){
         }
     }
 }
+

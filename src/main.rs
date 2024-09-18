@@ -1,19 +1,22 @@
-mod cli;
 mod cmdchecker;
 mod dirio;
 mod fileio;
 mod freader;
-mod lyltools;
 mod power;
 mod processmgmt;
 mod reg;
+mod shell;
+mod utils;
 use std::env;
 
-fn main() {
+pub type Error = Box<dyn std::error::Error>;
+
+fn main() -> Result<(), Error> {
     let arg: Vec<String> = env::args().collect();
     if arg.len() <= 1 {
-        cli::start_cli();
+        shell::start_shell()?;
     } else {
-        freader::read_file(&arg[1]);
+        freader::interpret_file(&arg[1])?;
     }
+    Ok(())
 }

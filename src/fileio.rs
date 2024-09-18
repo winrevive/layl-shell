@@ -1,14 +1,18 @@
-use std::fs::{self, File, OpenOptions};
-use std::io::{self, BufRead, Write};
+use super::Error;
+use std::fs::{self, File};
+use std::io::{self, BufRead};
 
-pub fn touch(data: Vec<&str>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn touch(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
         println!("usage: touch [filename]");
+        return Ok(());
     }
-    let file = File::create(data[1])?;
+    File::create(data[1])?;
     Ok(())
 }
 
+// I don't know what this is for, isn't this shell supposed to support pipes or writing output into files?
+/*
 pub fn fwrite(data: Vec<&str>) {
     if data.len() <= 2 {
         println!("usage: fwrite [filename] [content]");
@@ -25,37 +29,30 @@ pub fn fwrite(data: Vec<&str>) {
         .expect("write failed");
     println!("Wrote File");
 }
+*/
 
-pub fn fdelete(data: Vec<&str>) {
+pub fn fdel(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
-        println!("usage: fdelete [filename]");
-        return;
+        println!("usage: fdel [path\\to\\filename]");
+        return Ok(());
     }
-    match fs::remove_file(data[1]) {
-        Ok(_) => {
-            println!("Deleted File\n");
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
-    }
+    fs::remove_file(data[1])?;
+    println!("Deleted file: {}", data[1]);
+    Ok(())
 }
 
-pub fn fcopy(data: Vec<&str>) {
+pub fn fcopy(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 2 {
-        println!("usage: fcopy [originalfile] [newfile]");
-        return;
+        println!("usage: fcopy [path\\of\\original\\file] [path\\of\\newfile]");
+        return Ok(());
     }
-    match fs::copy(data[1], data[2]) {
-        Ok(_) => {
-            println!("Copied File\n");
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
-    }
+    fs::copy(data[1], data[2])?;
+    println!("Copied file: {} to {}", data[1], data[2]);
+    Ok(())
 }
 
+// I don't know what this is for, isn't this shell supposed to support pipes or writing output into files?
+/*
 pub fn fprint(data: Vec<&str>) {
     if data.len() <= 2 {
         println!("usage: fprint [filename] [content]");
@@ -78,30 +75,17 @@ pub fn fprint(data: Vec<&str>) {
         }
     }
 }
+*/
 
-pub fn fread(data: Vec<&str>) {
+pub fn cat(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
-        println!("usage: fread [filename]");
-        return;
+        println!("usage: cat [filename]");
+        return Ok(());
     }
-    let file = File::open(data[1]);
-    match file {
-        Ok(file) => {
-            let reader = io::BufReader::new(file);
-            for line in reader.lines() {
-                match line {
-                    Ok(line) => {
-                        println!("{}", line);
-                    }
-                    Err(_) => {
-                        println!("");
-                    }
-                }
-            }
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
+    let file = File::open(data[1])?;
+    let reader = io::BufReader::new(file);
+    for line in reader.lines() {
+        println!("{}", line?);
     }
+    Ok(())
 }
-

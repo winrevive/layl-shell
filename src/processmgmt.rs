@@ -1,69 +1,71 @@
-use std::ptr;
+use super::Error;
+use std::{ffi::CString, ptr};
+use winapi::um::{
+    handleapi::CloseHandle,
+    processthreadsapi::{OpenProcess, TerminateProcess},
+    shellapi::ShellExecuteA,
+    winnt::PROCESS_TERMINATE,
+    winuser::{FindWindowA, GetWindowThreadProcessId},
+};
 
-use alloc::ffi::CString;
-use winapi::um::{handleapi::CloseHandle, processthreadsapi::{OpenProcess, TerminateProcess}, shellapi::ShellExecuteA, winnt::PROCESS_TERMINATE, winuser::{FindWindowA, GetWindowThreadProcessId}};
-extern crate winapi;
-extern crate alloc;
-
-
-
-pub fn kill_process(data: Vec<&str>){
-    if data.len() <= 1 {
-        println!("usage: kill [pid]");
-        return;
+fn get_pid(process: &str) -> Result<u32, Error> {
+    let process_cstr = CString::new(process)?;
+    let mut pid: u32 = 0;
+    let hwnd = unsafe { FindWindowA(ptr::null_mut(), process_cstr.as_ptr()) };
+    if hwnd == ptr::null_mut() {
+        println!("Failed Getting PID to process");
+        return Err("Failed Getting PID to process".into());
     }
-    let pid: Result<u32, _> = data[1].parse();
-    match pid {
-        Ok(n) => {
-            let process_handle = unsafe {OpenProcess(PROCESS_TERMINATE, 0, n)};
-            if process_handle != ptr::null_mut() {
-                let result = unsafe { TerminateProcess(process_handle, 0)};
-                if result == 0 {
-                    //let error_code = unsafe { GetLastError() };
-                    println!("Failed to terminate process");
-                }
-                unsafe { CloseHandle(process_handle)};
-            }
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
-    }
+    unsafe { GetWindowThreadProcessId(hwnd, &mut pid) };
+
+    Ok(pid)
 }
 
-pub fn get_pid(data: Vec<&str>){
-    let mut pid:u32 = 0;
+pub fn kill_process(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
-        println!("usage: getpid [window-name]");
-        return;
+        println!("usage: kill [pid of process or process name]");
+        return Ok(());
     }
-    let window_name = CString::new(data[1..].join(" ")).map_err(|_| "Failed to convert window name to CString".to_string());    
-    match window_name {
-        Ok(n) => {
-                let hwnd = unsafe{FindWindowA(ptr::null_mut(), n.as_ptr())};
-                if hwnd == ptr::null_mut(){
-                    println!("Failed Getting PID to process");
-                    return;
-                }
-                unsafe {GetWindowThreadProcessId(hwnd, &mut pid)};
-                println!("PID Is {}", pid);
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
+
+    let pid: u32;
+
+    if data[1].parse::<u32>().is_err() {
+        pid = get_pid(data[1])?;
+    } else {
+        pid = data[1].parse()?;
     }
+
+    let process_handle = unsafe { OpenProcess(PROCESS_TERMINATE, 0, pid) };
+    if process_handle != ptr::null_mut() {
+        let result = unsafe { TerminateProcess(process_handle, 0) };
+        if result == 0 {
+            //let error_code = unsafe { GetLastError() };
+            println!("Failed to terminate process");
+            unsafe { CloseHandle(process_handle) };
+            return Err("Failed to terminate process".into());
+        }
+        unsafe { CloseHandle(process_handle) };
+    }
+    Ok(())
 }
 
-
-
-pub fn sudo(data: Vec<&str>) {
+pub fn pid(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
-        println!("usage: getpid [window-name]");
-        return;
+        println!("usage: getpid [process-name]");
+        return Ok(());
     }
-    let types = CString::new("runas").expect("Failed to convert to CString");
-    let command = CString::new(data[1]).expect("Failed to convert to CString");
-    let args = CString::new(data[2..].join(" ")).expect("Failed To Convert To CString");    
+    println!("PID: {}", get_pid(data[1])?);
+    Ok(())
+}
+
+pub fn sudo(data: Vec<&str>) -> Result<(), Error> {
+    if data.len() <= 1 {
+        println!("usage: sudo [command]");
+        return Ok(());
+    }
+    let types = CString::new("runas")?;
+    let command = CString::new(data[1])?;
+    let args = CString::new(data[2..].join(" "))?;
     unsafe {
         ShellExecuteA(
             ptr::null_mut(),
@@ -71,10 +73,8 @@ pub fn sudo(data: Vec<&str>) {
             command.as_ptr(),
             args.as_ptr(),
             ptr::null_mut(),
-            5
+            5,
         );
     }
+    Ok(())
 }
-
-
-

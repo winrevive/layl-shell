@@ -1,31 +1,17 @@
-
-mod normal;
-mod force;
 mod powerperms;
+mod procedures;
 
+use super::Error;
 
-
-
-pub fn power_management(data: Vec<&str>){
+pub fn power_management(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
         println!("usage: power [type] [isForce]");
-        return;
+        return Ok(());
     }
     if powerperms::give_power_permissions() == false {
         println!("Failed Giving Permission To Get Power Control Of Your Computer");
-        return
+        return Err("Failed Giving Permission To Get Power Control Of Your Computer".into());
     }
-    if data.len() > 2 {
-        match data[2].to_lowercase().as_str() {
-            "1" => {
-                force::force_power_procedures(data);
-            }
-            _ => {
-                normal::normal_power_procedures(data);
-            }
-        }
-    }
-    else {
-        normal::normal_power_procedures(data);
-    }
+    procedures::power_procedures(data)?;
+    Ok(())
 }

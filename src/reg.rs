@@ -1,25 +1,27 @@
-
 mod createreg;
-mod writereg;
 mod deletereg;
+mod writereg;
 
-pub fn start_mreg(data: Vec<&str>){
+use super::Error;
+
+pub fn start_mreg(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
         println!("usage: mreg [type] (args for all types)");
-        return
+        return Ok(());
     }
     match data[1].to_lowercase().as_str() {
         "-d" => {
-            deletereg::delete_reg(data);
+            deletereg::delreg(data)?;
         }
         "-w" => {
-            writereg::write_registry(data);
+            writereg::writereg(data)?;
         }
         "-c" => {
-            createreg::create_registry(data);
+            createreg::createreg(data)?;
         }
         _ => {
-            println!("incorrect type");
+            eprintln!("incorrect type");
         }
     }
+    Ok(())
 }

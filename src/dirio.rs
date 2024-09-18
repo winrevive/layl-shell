@@ -1,113 +1,64 @@
-use std::fs;
+use super::Error;
 use std::env;
+use std::fs;
 use std::path::Path;
 
-
-
-fn get_current_working_dir() -> Option<String> {
-    match env::current_dir() {
-        Ok(path) => Some(path.into_os_string().into_string().unwrap()),
-        Err(e) => {
-            eprintln!("{}", e);
-            None
-        }
-    }
+fn get_current_working_dir() -> Result<Option<String>, Error> {
+    let path = env::current_dir()?;
+    Ok(Some(path.display().to_string()))
 }
 
-pub fn dcreate(data: Vec<&str>){
+pub fn mkdir(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
-        println!("usage: dcreate [dirname]");
-        return;
+        println!("usage: mkdir [dirname]");
+        return Ok(());
     }
-    let status = fs::create_dir(data[1]);
-    match status {
-        Ok(_) => {
-            println!("Created Directory");
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
-    }
-}
-
-pub fn ddelete(data: Vec<&str>){
-    if data.len() <= 1 {
-        println!("usage: ddelete [dirname]");
-        return;
-    }
-    
-    let status = fs::remove_dir(data[1]);
-    match status {
-        Ok(_) => {
-            println!("Deleted Directory");
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
-    }
+    fs::create_dir(data[1])?;
+    println!("Created Directory: {}", data[1]);
+    Ok(())
 }
 
 // pub fn dcopy(data: Vec<&str>){
 //     // TODO: Add Recursive Directory Copying
 // }
 
-pub fn rddelete(data: Vec<&str>){
+pub fn deldir(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
-        println!("usage: rddelete [dirname]");
-        return;
+        println!("usage: deldir [-r] [dirname]");
+        return Ok(());
     }
-    
-    let status = fs::remove_dir_all(data[1]);
-    match status {
-        Ok(_) => {
-            println!("Deleted Directory");
+
+    match data[1] {
+        "-r" => {
+            fs::remove_dir_all(data[2])?;
+            println!("Deleted Directory: {}", data[2]);
         }
-        Err(e) => {
-            eprintln!("{}", e);
+        _ => {
+            fs::remove_dir(data[1])?;
+            println!("Deleted Directory: {}", data[1]);
         }
     }
+    Ok(())
 }
 
-pub fn change_directory(data: Vec<&str>){
+pub fn change_directory(data: Vec<&str>) -> Result<(), Error> {
     if data.len() <= 1 {
-        println!("usage: moveto [dirname]");
-        return;
+        let path = env::current_dir()?;
+        println!("{}", path.display());
+        return Ok(());
     }
     let path = Path::new(data[1]);
-    let status = env::set_current_dir(path);
-    match status {
-        Ok(_) => {
-            println!("Changed Directory To {}", path.display());
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
-    }
+    env::set_current_dir(path)?;
+    Ok(())
 }
 
-pub fn current_directory() {
-    let path = env::current_dir();
-    match path {
-        Ok(path) => {
-            println!("Current Directory Is {}", path.display());
-        }
-        Err(e) => {
-            eprintln!("{}", e);
-        }
-    }
-}
-
-pub fn print_directory(data: Vec<&str>) {
-    let path_str = match get_current_working_dir() {
+pub fn print_directory(data: Vec<&str>) -> Result<(), Error> {
+    let path_str = match get_current_working_dir()? {
         Some(p) => p,
-        None => return,
+        None => return Err("Error Getting Current Working Directory".into()),
     };
 
-    let str: &str = if data.len() <= 1 {
-        &path_str
-    } else {
-        data[1]
-    };
+    let str: &str = if data.len() <= 1 { &path_str } else { data[1] };
 
     let mut i: u32 = 0;
     let fs = fs::read_dir(str);
@@ -121,8 +72,7 @@ pub fn print_directory(data: Vec<&str>) {
                             Ok(fi) => {
                                 if fi.is_dir() {
                                     print!("[{:?}] ", file_name);
-                                }
-                                else {
+                                } else {
                                     print!("{:?} ", file_name);
                                 }
                             }
@@ -130,7 +80,7 @@ pub fn print_directory(data: Vec<&str>) {
                                 eprintln!("{}", e);
                             }
                         }
-                        i = i+1;
+                        i = i + 1;
                         if i % 6 == 0 {
                             println!()
                         }
@@ -139,7 +89,6 @@ pub fn print_directory(data: Vec<&str>) {
                         eprintln!("{}", e);
                     }
                 }
-                
             }
         }
         Err(e) => {
@@ -147,4 +96,5 @@ pub fn print_directory(data: Vec<&str>) {
         }
     }
     println!();
-}   
+    Ok(())
+}

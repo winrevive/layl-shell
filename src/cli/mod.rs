@@ -1,7 +1,6 @@
 use std::io;
 use std::io::Write;
 use crate::cmdchecker;
-use crate::lyltools;
 
 
 fn split_str(buffer: &str) -> Vec<&str>{
@@ -9,7 +8,7 @@ fn split_str(buffer: &str) -> Vec<&str>{
 }
 
 pub fn start_cli(){
-    println!("Layl Shell\nCompiled On {}\nThis program comes with absolutely NO warranty, Use at your own risk.\n\nCopyright the Winrevive Community\n", lyltools::whats_the_version());
+    //println!("Layl Shell\nCompiled On {}\nThis program comes with absolutely NO warranty, Use at your own risk.\n\nCopyright the Winrevive Community\n", lyltools::whats_the_version());
     let mut buffer = String::new();
     loop {
         print!("-> ");

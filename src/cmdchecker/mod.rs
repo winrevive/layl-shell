@@ -7,7 +7,7 @@ use crate::power;
 use crate::processmgmt;
 use crate::lyltools;
 use crate::reg;
-
+use crate::color;
 
 pub fn cmd_checker(data: Vec<&str>){
     if data.is_empty() {
@@ -94,6 +94,9 @@ pub fn cmd_checker(data: Vec<&str>){
         }
         "wait" => {
             lyltools::wait(data);
+        }
+        "color" => {
+            color::color_chooser(data);
         }
         _ => {
             if lyltools::start_process(data[0..].join(" ").as_str()) == false {

@@ -1,5 +1,4 @@
-use phnt::ffi::NtShutdownSystem;
-use winapi::{shared::ntdef::NT_SUCCESS, um::{powrprof::SetSuspendState, reason::SHTDN_REASON_MAJOR_SYSTEM, winuser::{ExitWindowsEx, EWX_LOGOFF}}};
+use winapi::um::{powrprof::SetSuspendState, reason::SHTDN_REASON_MAJOR_SYSTEM, winuser::{ExitWindowsEx, EWX_FORCE, EWX_LOGOFF, EWX_REBOOT, EWX_SHUTDOWN}};
 
 
 
@@ -7,18 +6,18 @@ pub fn force_power_procedures(data: Vec<&str>){
     match data[1].to_lowercase().as_str() {
         "-r" => {
             unsafe {
-                let status = NtShutdownSystem(phnt::ffi::SHUTDOWN_ACTION::ShutdownReboot);
-                if !NT_SUCCESS(status) {
-                    println!("Failed Restarting The Machine, Error Code {}", status);
+                let status = ExitWindowsEx(EWX_REBOOT | EWX_FORCE, SHTDN_REASON_MAJOR_SYSTEM);
+                if status == 0 {
+                    println!("Failed Restarting The Machine");
                     return;
                 }
             }
         }
         "-s" => {
             unsafe {
-                let status = NtShutdownSystem(phnt::ffi::SHUTDOWN_ACTION::ShutdownPowerOff);
-                if !NT_SUCCESS(status) {
-                    println!("Failed Shutting Down The Machine, Error Code {}", status);
+                let status = ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE, SHTDN_REASON_MAJOR_SYSTEM);
+                if status == 0 {
+                    println!("Failed Shutting Down The Machine");
                     return;
                 }
             }

@@ -8,15 +8,15 @@ BEGIN
     BEGIN
         BLOCK "040904E4"
         BEGIN
-            VALUE "CompanyName",      "zvqle"
+            VALUE "CompanyName",      "WinRevive"
             VALUE "FileDescription",  "Layl Shell"
             VALUE "FileVersion",      "0, 0, 0, 1"
             VALUE "InternalName",     "LaylSh"
-            VALUE "LegalCopyright",   "Copyright 2024 zvqle. All rights reserved."
+            VALUE "LegalCopyright",   "Copyright 2024 WinRevive. All rights reserved."
             VALUE "OriginalFilename", "layl.exe"
             VALUE "ProductName",      "Layl-Shell"
             VALUE "ProductVersion",   "0, 0, 0, 1"
-            VALUE "LegalTrademarks",  "zvqle"
+            VALUE "LegalTrademarks",  "WinRevive"
             VALUE "Comments",         "Shell"
         END
     END

@@ -18,10 +18,7 @@ pub fn cmd_checker(data: Vec<&str>){
             if data.len() <= 1 {
                 return;
             }
-            for arg in &data[1..] {
-                print!("{} ", arg);
-            }
-            println!(); 
+            println!("{} ", data[1..].join(" "));
         }
         "exit" => {
             process::exit(0);

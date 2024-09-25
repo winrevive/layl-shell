@@ -14,3 +14,4 @@ termcolor = "1.4.1"
 [build-dependencies]
 winres = "0.1.12"
 
+

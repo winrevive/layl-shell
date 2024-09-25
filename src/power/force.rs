@@ -24,8 +24,7 @@ pub fn force_power_procedures(data: Vec<&str>){
         }
         "-l" => {
             unsafe {
-                // No Force Option
-                let status = ExitWindowsEx(EWX_LOGOFF, SHTDN_REASON_MAJOR_SYSTEM);
+                let status = ExitWindowsEx(EWX_LOGOFF | EWX_FORCE, SHTDN_REASON_MAJOR_SYSTEM);
                 if status == 0 {
                     println!("Failed Logging Ofg");
                     return;

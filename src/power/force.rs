@@ -1,4 +1,4 @@
-use winapi::um::{powrprof::SetSuspendState, reason::SHTDN_REASON_MAJOR_SYSTEM, winuser::{ExitWindowsEx, EWX_FORCE, EWX_LOGOFF, EWX_REBOOT, EWX_SHUTDOWN}};
+use winapi::um::{powrprof::SetSuspendState, reason::SHTDN_REASON_MAJOR_SYSTEM, winuser::{ExitWindowsEx, LockWorkStation, EWX_FORCE, EWX_LOGOFF, EWX_REBOOT, EWX_SHUTDOWN}};
 
 
 
@@ -27,6 +27,15 @@ pub fn force_power_procedures(data: Vec<&str>){
                 let status = ExitWindowsEx(EWX_LOGOFF | EWX_FORCE, SHTDN_REASON_MAJOR_SYSTEM);
                 if status == 0 {
                     println!("Failed Logging Ofg");
+                    return;
+                }
+            }
+        }
+        "-lo" => {
+            unsafe {
+                let status = LockWorkStation();
+                if status == 0 {
+                    println!("Failed Locking Workstation");
                     return;
                 }
             }

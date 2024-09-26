@@ -15,7 +15,7 @@ pub fn read_file(filename: &str){
                 match line {
                     Ok(line) => {
                         let splitted_line = split_str(&line);
-                        cmdchecker::cmd_checker(splitted_line);
+                        cmdchecker::cmd_checker(splitted_line, line.clone());
                     }
                     Err(_) => {
                         println!("");

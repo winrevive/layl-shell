@@ -18,7 +18,7 @@ pub fn start_cli(){
             .read_line(&mut buffer)
             .expect("Error Reading Input");
         let str_data = split_str(buffer.as_str());
-        cmdchecker::cmd_checker(str_data);
+        cmdchecker::cmd_checker(str_data, buffer.clone());
     }
 }
 

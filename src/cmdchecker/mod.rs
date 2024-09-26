@@ -9,7 +9,7 @@ use crate::lyltools;
 use crate::reg;
 use crate::color;
 
-pub fn cmd_checker(data: Vec<&str>){
+pub fn cmd_checker(data: Vec<&str>, buffer: String){
     if data.is_empty() {
         return;
     }
@@ -18,7 +18,8 @@ pub fn cmd_checker(data: Vec<&str>){
             if data.len() <= 1 {
                 return;
             }
-            println!("{} ", data[1..].join(" "));
+            let output = &buffer[5..];
+            println!("{} ", output);
         }
         "exit" => {
             process::exit(0);

@@ -41,7 +41,8 @@ pub fn color_chooser(data: Vec<&str>){
 
     match write_color(Color::Rgb(r, g, b)) {
         Ok(_) => {
-            println!("Color Changed");
+            //println!("Color Changed");
+            return;
         }
         Err(e) => {
             eprintln!("{}", e)

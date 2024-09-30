@@ -1,15 +1,7 @@
-mod cli;
-mod freader;
-mod cmdchecker;
-mod fileio;
-mod dirio;
-mod processmgmt;
-mod lyltools;
-mod reg;
-mod power;
+mod layl;
+
+use layl::{fileio, shell};
 use std::env;
-mod init;
-mod color;
 
 //use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
@@ -17,10 +9,25 @@ fn main() {
     let arg: Vec<String> = env::args().collect();
     if arg.len() <= 1 {
         //color::write_color(Color::Blue);
-        init::read_init();
-        cli::start_cli();
-    }
-    else {
-        freader::read_file(&arg[1]);
+        match fileio::read_file("C:\\programdata\\init.lyl") {
+            Ok(_) => {}
+            Err(e) => {
+                eprintln!("{}", e);
+            }
+        }
+
+        match shell::start_shell() {
+            Ok(_) => {}
+            Err(e) => {
+                eprintln!("{}", e);
+            }
+        }
+    } else {
+        match fileio::read_file(&arg[1]) {
+            Ok(_) => {}
+            Err(e) => {
+                eprintln!("{}", e);
+            }
+        }
     }
 }

@@ -1,11 +1,11 @@
-use super::Result;
+use super::{RegistryGuard, Result};
 use std::{ffi::CString, ptr};
 use winapi::{
     shared::minwindef::HKEY__,
     um::{
         winnt::KEY_READ,
         winreg::{
-            RegCloseKey, RegCreateKeyA, RegOpenKeyExA, HKEY_CLASSES_ROOT, HKEY_CURRENT_CONFIG,
+            RegCreateKeyA, RegOpenKeyExA, HKEY_CLASSES_ROOT, HKEY_CURRENT_CONFIG,
             HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, HKEY_USERS,
         },
     },
@@ -37,21 +37,17 @@ pub fn create_registry(data: Vec<&str>) -> Result<()> {
             KEY_READ,
             &mut closing,
         );
+
+        let _registry_guard = RegistryGuard(closing);
+
         if status == 0 {
             println!("mreg: registry key already exists");
-            RegCloseKey(closing);
             return Ok(());
         }
         let c_status = RegCreateKeyA(hkey, CString::new(data[3])?.into_raw(), &mut closing);
         if c_status == 0 {
             println!("mreg: registry key created!");
-            if !closing.is_null() {
-                RegCloseKey(closing);
-            }
         } else {
-            if !closing.is_null() {
-                RegCloseKey(closing);
-            }
             eprintln!(
                 "mreg: failed creating registry key, error code: {}",
                 c_status

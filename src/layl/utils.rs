@@ -1,6 +1,7 @@
 use std::{
     fs::{self, File},
     io::{self, Read, Write},
+    time::Instant,
 };
 
 use super::Result;
@@ -55,18 +56,38 @@ pub fn wait(data: Vec<&str>) -> Result<()> {
 
     let time = match result.as_str() {
         "ms" => data[1].trim_end_matches("ms").parse::<u32>()?,
-        "s" => data[1].trim_end_matches("s").parse::<u32>()?,
-        "m" => data[1].trim_end_matches("m").parse::<u32>()?,
-        "h" => data[1].trim_end_matches("h").parse::<u32>()?,
+        "s" => data[1].trim_end_matches("s").parse::<u32>()? * 1000,
+        "m" => data[1].trim_end_matches("m").parse::<u32>()? * 60000,
+        "h" => data[1].trim_end_matches("h").parse::<u32>()? * 3600000,
         "" => data[1].parse::<u32>()?,
         _ => {
             return Err("Invalid Time Extension".into());
         }
     };
 
+    let start = Instant::now();
+
     unsafe {
         Sleep(time);
     }
+
+    let elapsed = start.elapsed();
+    let (elapsed_time, elapsed_time_extension) = match result.as_str() {
+        "ms" => (elapsed.as_millis(), "ms"),
+        "s" => (elapsed.as_secs().into(), "s"),
+        "m" => ((elapsed.as_secs() / 60).into(), "m"),
+        "h" => ((elapsed.as_secs() / 3600).into(), "h"),
+        "" => (elapsed.as_millis(), "ms"),
+        _ => {
+            return Err("Invalid Time Extension".into());
+        }
+    };
+
+    println!("Specified time: {}{}", time, elapsed_time_extension);
+    println!(
+        "Actual time (according to Rust timing): {}{}",
+        elapsed_time, elapsed_time_extension
+    );
 
     Ok(())
 }

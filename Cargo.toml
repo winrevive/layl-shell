@@ -21,6 +21,7 @@ winapi = { version = "0.3", features = [
 create_process_w = { version = "0.1.0", package = "CreateProcessW" }
 phnt = "0.0.31"
 termcolor = "1.4.1"
+term_size = "0.3.2"
 
 [build-dependencies]
 winres = "0.1.12"

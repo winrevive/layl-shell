@@ -1,4 +1,4 @@
-use super::{color, dirio, fileio, power, processmgmt, reg, utils, Result};
+use super::{color, io, power, processmgmt, reg, utils, Result};
 use create_process_w::Command;
 use std::process;
 
@@ -22,34 +22,25 @@ pub fn cmd_checker(data: Vec<&str>, buffer: &String) -> Result<()> {
             process::exit(0);
         }
         "fcreate" | "touch" => {
-            fileio::touch(data)?;
+            io::touch(data)?;
         }
-        /*"fwrite" => {
-            fileio::fwrite(data)?;
-        }*/
         "fread" | "cat" => {
-            fileio::cat(data)?;
+            io::cat(data)?;
         }
-        "fdel" => {
-            fileio::fdel(data)?;
+        "del" | "rm" => {
+            io::layl_rm(data)?;
         }
-        "fcopy" => {
-            fileio::fcopy(data)?;
+        "copy" | "cpy" => {
+            io::layl_copy(data)?;
         }
-        /*"fprint" => {
-            fileio::fprint(data)?;
-        }*/
         "dcreate" | "mkdir" => {
-            dirio::mkdir(data)?;
-        }
-        "ddel" => {
-            dirio::ddel(data)?;
+            io::mkdir(data)?;
         }
         "cd" => {
-            dirio::change_directory(data)?;
+            io::change_directory(data)?;
         }
         "pd" | "ls" => {
-            dirio::print_directory(data)?;
+            io::print_directory(data)?;
         }
         "kill" => {
             processmgmt::kill_process(data)?;
@@ -81,9 +72,16 @@ pub fn cmd_checker(data: Vec<&str>, buffer: &String) -> Result<()> {
         "wait" => {
             utils::wait(data)?;
         }
-        _ => {
-            Command::new(data[0..].join(" ").as_str()).status()?;
-        }
+        _ => match Command::new(data[0..].join(" ").as_str()).status() {
+            Ok(_) => {}
+            Err(e) => {
+                if e.code() == 2 {
+                    println!("{}: command not found", data[0]);
+                } else {
+                    eprintln!("{}", e);
+                }
+            }
+        },
     }
     Ok(())
 }

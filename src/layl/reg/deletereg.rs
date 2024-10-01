@@ -1,11 +1,11 @@
-use super::Result;
+use super::{RegistryGuard, Result};
 use std::{ffi::CString, ptr};
 use winapi::{
     shared::minwindef::HKEY__,
     um::{
         winnt::KEY_SET_VALUE,
         winreg::{
-            RegCloseKey, RegDeleteKeyA, RegOpenKeyExA, HKEY_CLASSES_ROOT, HKEY_CURRENT_CONFIG,
+            RegDeleteKeyA, RegOpenKeyExA, HKEY_CLASSES_ROOT, HKEY_CURRENT_CONFIG,
             HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, HKEY_USERS,
         },
     },
@@ -37,24 +37,18 @@ pub fn delete_reg(data: Vec<&str>) -> Result<()> {
             KEY_SET_VALUE,
             &mut closing,
         );
+
+        let _registry_guard = RegistryGuard(closing);
+
         if o_status != 0 {
             println!("mreg: couldn't find registry key");
-            if !closing.is_null() {
-                RegCloseKey(closing);
-            }
             return Ok(());
         }
         let d_status = RegDeleteKeyA(hkey, CString::new(data[3])?.into_raw());
         if d_status != 0 {
             println!("mreg: couldn't delete registry key");
-            if !closing.is_null() {
-                RegCloseKey(closing);
-            }
         } else {
             println!("mreg: registry key deleted!");
-            if !closing.is_null() {
-                RegCloseKey(closing);
-            }
         }
     }
     Ok(())

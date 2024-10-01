@@ -1,15 +1,13 @@
 mod layl;
 
-use layl::{fileio, shell};
-use std::env;
-
-//use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+use layl::{file_interpret::read_file, init, shell};
+use std::{env, path::Path};
 
 fn main() {
     let arg: Vec<String> = env::args().collect();
     if arg.len() <= 1 {
         //color::write_color(Color::Blue);
-        match fileio::read_file("C:\\programdata\\init.lyl") {
+        match init::read_init() {
             Ok(_) => {}
             Err(e) => {
                 eprintln!("{}", e);
@@ -23,11 +21,16 @@ fn main() {
             }
         }
     } else {
-        match fileio::read_file(&arg[1]) {
-            Ok(_) => {}
-            Err(e) => {
-                eprintln!("{}", e);
+        let filename = Path::new(&arg[1]);
+        if filename.exists() {
+            match read_file(filename) {
+                Ok(_) => {}
+                Err(e) => {
+                    eprintln!("{}", e);
+                }
             }
+        } else {
+            eprintln!("File does not exist");
         }
     }
 }

@@ -18,6 +18,11 @@ pub fn start_shell() -> Result<()> {
         buffer.clear();
         stdin.read_line(&mut buffer)?;
 
-        cmdchecker::cmd_checker(buffer.split_whitespace().collect(), &buffer)?;
+        match cmdchecker::cmd_checker(buffer.split_whitespace().collect(), &buffer) {
+            Ok(_) => {}
+            Err(e) => {
+                eprintln!("{}", e);
+            }
+        }
     }
 }

@@ -1,22 +1,23 @@
-![alt text](resources/icon.png "Logo")
+![Layl logo](resources/icon.png)
 
+# Layl shell
+Welcome to the Layl shell, a shell and script interperter for Microsoft Windows®
 
+## How to get the executable?
 
-# Layl Shell
-Welcome To The Layl Shell, A Shell And Script Interperter For Microsoft Windows
+For more or less user-ready iterations of this WIP software, download the executable from the [Releases](https://github.com/winrevive/layl-shell/releases)
 
-Copyright WinRevive, All Rights Reserved
+For development builds, clone the [dev branch](https://github.com/winrevive/layl-shell/tree/dev) and build it.
 
-# How To Get The Executable
-To Get The Beta Version, Compile the source in the dev branch of the repository
-To Get the Stable version, check releases
+## How to use
 
-# How To Use
+ - To enter the Shell, just run the executable.
+ - To use the interperter, either go to the commandline and start ``layl [path/to/your/filename.lsh]`` or enter the shell and type ``run [path/to/your/filename.lsh]`` (Can take any plaintext file and interpret, file extension doesn't really matter.)
 
- - To enter the Shell, Just Start The Executable
- - To Use The Interperter, Either go to the commandline and start ``layl your-file-name.lys`` or enter the shell and type ``run your-file-name.lys`` (MUST BE IN SAME DIRECTORY AS THE SHELL!!!)
+## Layl shell/script interpreter documentation
 
+[Docs are located here](docs/contents.md)
 
-# Layl Shell/Script Interpreter Documentation
+© Winrevive Community, 2024
 
-[Docs Are Located Here](docs/contents.md)
+Layl-shell is licensed under the MIT License, read the [LICENSE.md](LICENSE.md) for more information.
